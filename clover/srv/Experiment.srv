@@ -1,0 +1,5 @@
+float32 height
+bool auto_arm
+---
+bool success
+string message

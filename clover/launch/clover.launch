@@ -7,7 +7,7 @@
     <arg name="rosbridge" default="true"/>
     <arg name="main_camera" default="true"/>
     <arg name="optical_flow" default="true"/>
-    <arg name="aruco" default="false"/>
+    <arg name="aruco" default="true"/>
     <arg name="rangefinder_vl53l1x" default="true"/>
     <arg name="led" default="true"/>
     <arg name="blocks" default="false"/>
@@ -46,7 +46,10 @@
     <node pkg="tf2_ros" type="static_transform_publisher" name="map_flipped_frame" args="0 0 0 3.1415926 3.1415926 0 map map_flipped"/>
 
     <!-- simplified offboard control -->
-    <node name="simple_offboard" pkg="clover" type="simple_offboard" output="screen" clear_params="true">
+    <node name="simple_offboard" pkg="clover" type="simple_offboard" output="log" clear_params="true" respawn="true">
+        <param name="reference_frames/body" value="map"/>
+        <param name="reference_frames/base_link" value="map"/>
+        <param name="reference_frames/navigate_target" value="map"/>
         <param name="reference_frames/main_camera_optical" value="map"/>
     </node>
 

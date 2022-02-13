@@ -87,6 +87,7 @@ find_package(OpenCV ${_opencv_version} REQUIRED
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
+  Experiment.srv
   GetTelemetry.srv
   Navigate.srv
   NavigateGlobal.srv
@@ -173,6 +174,7 @@ add_library(${PROJECT_NAME}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(simple_offboard src/simple_offboard.cpp)
+add_executable(offboard src/offboard.cpp)
 
 # PX4 already has rc and led targets, so we prefix ours with clover_
 add_executable(clover_rc src/rc.cpp)
@@ -186,6 +188,11 @@ add_executable(clover_led src/led.cpp)
 add_executable(shell src/shell.cpp)
 
 target_link_libraries(simple_offboard
+  ${catkin_LIBRARIES}
+  ${GeographicLib_LIBRARIES}
+)
+
+target_link_libraries(offboard
   ${catkin_LIBRARIES}
   ${GeographicLib_LIBRARIES}
 )
@@ -206,6 +213,7 @@ target_link_libraries(clover_led ${catkin_LIBRARIES})
 target_link_libraries(shell ${catkin_LIBRARIES})
 
 add_dependencies(simple_offboard ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(offboard ${PROJECT_NAME}_generate_messages_cpp)
 
 add_dependencies(clover_led ${PROJECT_NAME}_generate_messages_cpp)
 
@@ -242,7 +250,7 @@ target_link_libraries(${PROJECT_NAME}
 # )
 
 # Mark executables and/or libraries for installation
-install(TARGETS simple_offboard clover_rc camera_markers vpe_publisher clover_led shell clover
+install(TARGETS simple_offboard offboard clover_rc camera_markers vpe_publisher clover_led shell clover
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
